@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja-jp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+    <title>NECTO</title>
+</head>
+<!-- class order: layout - text-style - shape appearence -->
+
+<body>
+    <h1 class="block w-full my-5 font-bold tracking-tight text-gray-900 text-center text-4xl">
+        Projects
+    </h1>
+
+    <div x-data="menu" class="w-4/5 mx-auto mb-3 grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
+        <!-- Cards -->
+        <template x-for="menu in menuItems">
+            <div class="w-full max-w-sm p-3 mx-auto mb-5 bg-white border border-gray-200 rounded-lg shadow">
+                <h5 x-text="menu" class="block mb-3 font-bold text-gray-900 tracking-tight text-center"></h5>
+                <a x-bind:href="'./' + menu" target="_blank" rel="noopener noreferrer" class="block w-1/3 mx-auto mb-3 px-2 py-2.5 text-white font-medium text-sm text-center
+                        bg-gray-700 hover:bg-gray-800 rounded-lg focus:outline-none
+                ">
+                    member
+                </a>
+                <a x-bind:href="'./' + menu + '/admins'" target="_blank" rel="noopener noreferrer" class="block w-1/3 mx-auto px-2 py-2.5 text-white font-medium text-sm text-center
+                    bg-gray-700 hover:bg-gray-800 rounded-lg focus:outline-none
+                ">
+                    admin
+                </a>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('menu', () => ({
+                menuItems: [
+                    "laravel-former",
+                ],
+
+            }))
+        })
+    </script>
+</body>
+
+</html>
