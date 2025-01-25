@@ -1,4 +1,4 @@
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
 FLUSH PRIVILEGES;
 
-CREATE DATABASE IF NOT EXISTS `apply_former_db`;
+CREATE DATABASE IF NOT EXISTS `cmd_cheat_sheet_db`;

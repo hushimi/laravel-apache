@@ -27,6 +27,8 @@ services:
       - ./docker/terminal/.git-prompt.sh:/root/git-prompt.sh
       - ./src:/var/www/html
       # 各アプリごとのvendorとnode_modulesをvolumeにする
+      - cheat_sheet_vendor:/var/www/html/cmd-cheat-sheet/vendor
+      - cheat_sheet_node:/var/www/html/cmd-cheat-sheet/node_modules
 
   phpmyadmin:
     depends_on:
@@ -58,4 +60,5 @@ networks:
 volumes:
   mydb_data:
   phpmyadmin_session_laravel:
-  # vendor/node退避
+  cheat_sheet_vendor:
+  cheat_sheet_node:
