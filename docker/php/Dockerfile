@@ -23,7 +23,7 @@ RUN apt update && apt install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
 # node
 RUN apt update && apt install -y nodejs npm \
     && npm install n -g \
-    && n lts
+    && n --latest
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

@@ -24,11 +24,11 @@ services:
       - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
       - ./docker/terminal/.bashrc:/root/.bashrc
-      - ./docker/terminal/.git-prompt.sh:/root/git-prompt.sh
+      - ./docker/terminal/git-prompt.sh:/root/git-prompt.sh
       - ./src:/var/www/html
       # 各アプリごとのvendorとnode_modulesをvolumeにする
-      - cheat_sheet_vendor:/var/www/html/cmd-cheat-sheet/vendor
-      - cheat_sheet_node:/var/www/html/cmd-cheat-sheet/node_modules
+      - laravel_react_base_vendor:/var/www/html/laravel-react-base/vendor
+      - laravel_react_base_node:/var/www/html/laravel-react-base/node_modules
 
   phpmyadmin:
     depends_on:
@@ -60,5 +60,5 @@ networks:
 volumes:
   mydb_data:
   phpmyadmin_session_laravel:
-  cheat_sheet_vendor:
-  cheat_sheet_node:
+  laravel_react_base_vendor:
+  laravel_react_base_node:
