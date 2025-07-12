@@ -87,5 +87,12 @@ RUN chown -R dev:dev /home/dev
 # ==========================================
 WORKDIR /var/www/html
 
-# Change ownership of /var/www/html to dev user
-RUN chown -R dev:dev /var/www/html
+# fix permission for mounted volumes and start apache
+RUN echo '#!/bin/bash\n\
+sudo chown -R dev:dev /var/www/html\n\
+\n\
+apache2-foreground' > /usr/local/bin/start.sh \
+    && chmod +x /usr/local/bin/start.sh
+
+# Set the startup script as the default command
+CMD ["/usr/local/bin/start.sh"]

@@ -21,6 +21,10 @@ services:
     ports:
       - 8000:80
       - 5173:5173
+    environment:
+      # Ensure proper permissions for mounted volumes
+      APACHE_RUN_USER: dev
+      APACHE_RUN_GROUP: dev
     volumes:
       - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
