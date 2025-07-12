@@ -1,38 +1,91 @@
 FROM php:8.3.15-apache
 
-# VITE用ポート開放
+# Expose Vite development server port
 EXPOSE 5173
 
-# Package & Library install
-RUN apt update && apt install -y zlib1g-dev g++ libicu-dev zip libzip-dev libpq-dev \
-    && docker-php-ext-install intl opcache pdo pgsql pdo_pgsql pdo_mysql \
+# ==========================================
+# System Package Installation
+# ==========================================
+RUN apt update && apt install -y \
+    zlib1g-dev \
+    g++ \
+    libicu-dev \
+    zip \
+    libzip-dev \
+    libpq-dev \
+    git \
+    sudo \
+    && a2enmod rewrite
+
+# ==========================================
+# PHP Extensions Installation
+# ==========================================
+RUN docker-php-ext-install \
+    intl \
+    opcache \
+    pdo \
+    pgsql \
+    pdo_pgsql \
+    pdo_mysql \
+    bcmath \
     && pecl install mailparse \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install bcmath \
-    && apt-get install -y git \
-    && a2enmod rewrite
+    && docker-php-ext-install zip
 
-# gd, exif
-RUN apt update && apt install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+# ==========================================
+# GD and EXIF Extensions
+# ==========================================
+RUN apt update && apt install -y \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd exif
 
-# node
+# ==========================================
+# Node.js Installation
+# ==========================================
 RUN apt update && apt install -y nodejs npm \
     && npm install n -g \
     && n --latest
 
-# Composer
+# ==========================================
+# Composer Installation
+# ==========================================
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 
-# Laravel Package install
+# ==========================================
+# Laravel Installer
+# ==========================================
 RUN composer global require "laravel/installer"
 
-# WorkDir Path setting
+# ==========================================
+# User Setup
+# ==========================================
+RUN useradd -m -s /bin/bash dev \
+    && usermod -aG sudo dev \
+    && echo "dev ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# ==========================================
+# Git Configuration
+# ==========================================
+# Create .ssh directory for dev user (will be overridden by volume mount)
+RUN mkdir -p /home/dev/.ssh \
+    && chown -R dev:dev /home/dev/.ssh \
+    && chmod 700 /home/dev/.ssh
+
+# Ensure proper permissions for shared credentials
+RUN chown -R dev:dev /home/dev
+
+# ==========================================
+# Working Directory Setup
+# ==========================================
 WORKDIR /var/www/html
+
+# Change ownership of /var/www/html to dev user
+RUN chown -R dev:dev /var/www/html

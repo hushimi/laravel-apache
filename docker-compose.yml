@@ -17,15 +17,18 @@ services:
   myapp:
     build:
       context: ./docker/php
+    user: dev
     ports:
       - 8000:80
       - 5173:5173
     volumes:
       - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
-      - ./docker/terminal/.bashrc:/root/.bashrc
-      - ./docker/terminal/git-prompt.sh:/root/git-prompt.sh
+      - ./docker/terminal/.bashrc:/home/dev/.bashrc
+      - ./docker/terminal/git-prompt.sh:/home/dev/git-prompt.sh
       - ./src:/var/www/html
+      # Share SSH keys from WSL2 (only if directory exists)
+      - ~/.ssh:/home/dev/.ssh:ro
       # 各アプリごとのvendorとnode_modulesをvolumeにする
       - laravel_react_base_vendor:/var/www/html/laravel-react-base/vendor
       - laravel_react_base_node:/var/www/html/laravel-react-base/node_modules
